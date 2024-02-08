@@ -4,6 +4,12 @@ import { format } from "date-fns";
 import { SearchIcon, Trash2Icon } from "lucide-react";
 import { useEffect, useState, type FormEvent, type MouseEvent } from "react";
 import { getWeatherData } from "../services/open-weather-api";
+import { InputCountry } from "./input-country-code/input-country";
+import {
+  SearchWeatherForm,
+  SearchWeatherFormProps,
+} from "./search-weather-form";
+import Image from "next/image";
 
 type WeatherData = {
   location: {
@@ -63,20 +69,12 @@ function WeatherSearchView() {
     }
   }, [status]);
 
-  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const onSubmit: SearchWeatherFormProps["onSubmit"] = async ({
+    city,
+    countryCode,
+  }) => {
     try {
-      setStatus("loading");
-      event.preventDefault();
-      const city = (document.getElementById("input-city") as HTMLInputElement)
-        .value;
-      const country = (
-        document.getElementById("input-country") as HTMLInputElement
-      ).value;
-      if (!city || !country) {
-        return;
-      }
-
-      const newData = await getWeatherData(city, country);
+      const newData = await getWeatherData(city, countryCode);
       setData(newData);
       addHistory({
         location: newData.location,
@@ -88,14 +86,6 @@ function WeatherSearchView() {
       }
       console.error(error);
     }
-  };
-
-  const onClear = (evt: MouseEvent<HTMLButtonElement>) => {
-    evt.preventDefault();
-    const form = document.getElementById(
-      "weather-search-form"
-    ) as HTMLFormElement;
-    form.reset();
   };
 
   const onSearch = (index: number) => {
@@ -128,82 +118,77 @@ function WeatherSearchView() {
   };
 
   return (
-    <div>
-      <form
-        id="weather-search-form"
-        className="flex flex-row gap-2 flex-wrap"
-        onSubmit={onSubmit}
-      >
-        <label htmlFor="input-city">
-          City:
-          <input
-            id="input-city"
-            name="input-city"
-            type="text"
-            className=" border rounded-md"
-            required
-          />
-        </label>
-        <label htmlFor="input-country">
-          Country:
-          <input
-            id="input-country"
-            name="input-country"
-            type="text"
-            className=" border rounded-md"
-            required
-          />
-        </label>
-        <button className="border px-2" type="submit">
-          Search
-        </button>
-        <button className="border px-2" onClick={onClear}>
-          Clear
-        </button>
-      </form>
-      {error && <p className="text-red-500">{error.message}</p>}
+    <div className="w-full">
+      <SearchWeatherForm onSubmit={onSubmit} />
       {data && (
-        <div className="px-8 py-4">
-          <h2>
-            {data.location.city}, {data.location.countryCode}
-          </h2>
-          <h3 className="text-6xl font-bold">{data.weather.main}</h3>
-          <ul>
-            <li>Description: {data.weather.description}</li>
-            <li>Temperature: {data.weather.temperature}</li>
-            <li>Humidity: {data.weather.humidity}</li>
-            <li>Time: {format(data.searchedDt, "yyyy-mm-dd hh:mm a")}</li>
-          </ul>
+        <div className="relative border border-white mt-40 rounded-xl  bg-white/20">
+          <Image
+            className="absolute max-w-full h-auto right-0 -top-32"
+            alt="sun"
+            width={300}
+            height={300}
+            src={`https://openweathermap.org/img/wn/${data.weather.icon}@2x.png`}
+          />
+          <div className="px-8 py-4">
+            <h1 className="text-lg">Today&apos;s Weather</h1>
+            <p className="text-7xl text-[#6C40B5] font-bold">
+              {kelvinToCelsius(data.weather.temperature).toFixed(0)}°
+            </p>
+            <p>
+              H:{kelvinToCelsius(data.weather.maxTemperature).toFixed(0)}° L:
+              {kelvinToCelsius(data.weather.minTemperature).toFixed(0)}°
+            </p>
+            <ul className="flex flex-row justify-between">
+              <li>
+                {data.location.city}, {data.location.countryCode}
+              </li>
+              <li>{format(data.searchedDt, "dd-mm-yyyy hh:mm a")}</li>{" "}
+              <li>Humidity: {data.weather.humidity}%</li>
+              <li>{data.weather.description}</li>
+            </ul>
+          </div>
+          <div className="px-4 mx-8 py-4 rounded-xl bg-white/20">
+            <h2 className="text-lg">Search History</h2>
+            <ul className="flex flex-col gap-2 mt-2">
+              {histories
+                .sort((a, b) => {
+                  return b.searchedDt.getTime() - a.searchedDt.getTime();
+                })
+                .map((history, index) => (
+                  <li
+                    className="flex flex-row bg-white/40 px-4 py-3 rounded-xl shadow-sm items-center"
+                    key={history.searchedDt.getTime()}
+                  >
+                    <p className="flex-1">
+                      {history.location.city}, {history.location.countryCode}
+                    </p>
+                    <div className="flex flex-row gap-2 items-center">
+                      <p>{format(history.searchedDt, "dd-mm-yyyy hh:mm a")}</p>
+                      <button
+                        onClick={onSearch(index)}
+                        className="bg-white rounded-full p-1"
+                      >
+                        <SearchIcon />
+                      </button>
+                      <button
+                        onClick={onRemoveHistory(index)}
+                        className="bg-white rounded-full p-1"
+                      >
+                        <Trash2Icon />
+                      </button>
+                    </div>
+                  </li>
+                ))}
+            </ul>
+          </div>
         </div>
       )}
-      <div>
-        <h2 className="text-2xl font-bold">Search History</h2>
-        <hr className="h-0.5 bg-black/50" />
-        <ol className="flex flex-col gap-2 mt-2">
-          {histories
-            .sort((a, b) => {
-              return b.searchedDt.getTime() - a.searchedDt.getTime();
-            })
-            .map((history, index) => (
-              <li className="flex flex-row" key={history.searchedDt.getTime()}>
-                <p className="flex-1">
-                  {history.location.city}, {history.location.countryCode}
-                </p>
-                <div className="flex flex-row gap-2">
-                  <p>{format(history.searchedDt, "yyyy-mm-dd hh:mm a")}</p>
-                  <button onClick={onSearch(index)}>
-                    <SearchIcon />
-                  </button>
-                  <button onClick={onRemoveHistory(index)}>
-                    <Trash2Icon />
-                  </button>
-                </div>
-              </li>
-            ))}
-        </ol>
-      </div>
     </div>
   );
 }
 
 export { WeatherSearchView };
+
+function kelvinToCelsius(kelvin: number): number {
+  return kelvin - 273.15;
+}

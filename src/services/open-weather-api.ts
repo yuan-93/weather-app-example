@@ -17,6 +17,8 @@ export const buildOpenWeatherGeocodingUrl = (
   );
 };
 
+// export const buildOpenWeatherIconurl =
+
 export const getWeatherData = async (city: string, country: string) => {
   const geoCodeResponse = await fetch(
     buildOpenWeatherGeocodingUrl(city, country)
