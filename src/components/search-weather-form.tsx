@@ -52,7 +52,7 @@ function SearchWeatherForm({ onSubmit }: SearchWeatherFormProps) {
     <form
       id="weather-search-form"
       onSubmit={handleOnSubmit}
-      className=" max-w-full w-full"
+      className=" w-full relative"
     >
       <div className="flex flex-row w-full gap-1">
         <div className="flex flex-row rounded-2xl h-10 sm:h-[60px] px-2.5 sm:px-4 gap-2.5 sm:gap-4 flex-1 bg-white/20 dark:bg-[#1A1A1A]/50">
@@ -102,7 +102,9 @@ function SearchWeatherForm({ onSubmit }: SearchWeatherFormProps) {
           )}
         </button>
       </div>
-      {error && <p className="text-red-500 px-2.5 sm:px-4">{error.message}</p>}
+      {error && (
+        <p className="absolute text-red-500 px-2.5 sm:px-4">{error.message}</p>
+      )}
     </form>
   );
 }
