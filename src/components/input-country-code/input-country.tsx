@@ -43,7 +43,7 @@ function InputCountry({
             state.isFocused && "",
             state.isDisabled && "opacity-50"
           ),
-        valueContainer: () => "cursor-text",
+        valueContainer: () => "cursor-text dark:text-white",
         placeholder: () => "opacity-80",
         menu: (state) =>
           clsx("bg-white relative my-2.5 shadow-md rounded-md border"),

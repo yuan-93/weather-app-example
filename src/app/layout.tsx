@@ -1,6 +1,8 @@
+import "./globals.css";
+
+import { Providers } from "@/components/providers";
 import type { Metadata } from "next";
 import { Noto_Sans } from "next/font/google";
-import "./globals.css";
 
 const noto_sans = Noto_Sans({
   subsets: ["latin"],
@@ -20,7 +22,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${noto_sans.variable}`}>
-      <body>{children}</body>
+      <body>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

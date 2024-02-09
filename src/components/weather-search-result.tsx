@@ -11,27 +11,33 @@ export function WeatherSearchResult({ data }: WeatherSearchResultProps) {
   return (
     <div className="grid grid-cols-12">
       <div className=" col-span-6 sm:colspan-12">
-        <Text as="h1" size="body">
+        <Text as="h1" size="body" className="dark:text-white">
           Today&apos;s Weather
         </Text>
-        <Text as="p" size="headline" className="text-[#6C40B5] font-bold">
+        <Text
+          as="p"
+          size="headline"
+          className="text-[#6C40B5] font-bold dark:text-white"
+        >
           {kelvinToCelsius(data.weather.temperature).toFixed(0)}°
         </Text>
-        <p>
+        <p className="dark:text-white">
           H: {kelvinToCelsius(data.weather.maxTemperature).toFixed(0)}° L:{" "}
           {kelvinToCelsius(data.weather.minTemperature).toFixed(0)}°
         </p>
-        <p className="font-bold text-gray-500 sm:hidden">
+        <p className="font-bold text-gray-500 sm:hidden dark:text-white">
           {data.location.city}, {data.location.countryCode}
         </p>
       </div>
       <ul className="col-span-6 sm:col-span-12 gap-1 sm:gap-0 flex sm:flex-row flex-col-reverse items-end justify-start sm:justify-between text-gray-500 text-sm sm:text-base">
-        <li className="font-bold text-gray-500 hidden sm:block">
+        <li className="font-bold text-gray-500 hidden sm:block dark:text-white">
           {data.location.city}, {data.location.countryCode}
         </li>
-        <li>{format(data.searchedDt, "dd-mm-yyyy hh:mmaaa")}</li>{" "}
-        <li>Humidity: {data.weather.humidity}%</li>
-        <li>{data.weather.description}</li>
+        <li className="dark:text-white">
+          {format(data.searchedDt, "dd-mm-yyyy hh:mmaaa")}
+        </li>{" "}
+        <li className="dark:text-white">Humidity: {data.weather.humidity}%</li>
+        <li className="dark:text-white">{data.weather.description}</li>
       </ul>
     </div>
   );
