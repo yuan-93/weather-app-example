@@ -7,6 +7,7 @@ import {
   SearchWeatherForm,
   SearchWeatherFormProps,
 } from "./search-weather-form";
+import { Skeleton } from "./skeleton";
 import type { SearchedHistory, WeatherData } from "./types";
 import { WeatherSearchHistory } from "./weather-search-history";
 import { WeatherSearchResult } from "./weather-search-result";
@@ -85,9 +86,11 @@ function WeatherSearchView() {
   };
 
   return (
-    <div className="w-full">
+    <>
       <SearchWeatherForm onSubmit={onSubmit} />
-      {data && (
+      {status === "loading" ? (
+        <Skeleton className="w-full h-60 rounded-2xl" />
+      ) : data ? (
         <div className="relative border border-white mt-28 rounded-2xl bg-white/20 pt-4 sm:pt-16 pb-4 px-4 sm:px-8">
           <Image
             className="absolute max-w-full h-auto right-[23px] sm:right-[40px] -top-[68px] sm:-top-[95px] w-[150px] sm:w-80"
@@ -104,8 +107,8 @@ function WeatherSearchView() {
             onRemoveHistory={onRemoveHistory}
           />
         </div>
-      )}
-    </div>
+      ) : null}
+    </>
   );
 }
 
