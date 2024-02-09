@@ -6,6 +6,6 @@ export interface SkeletonProps {
 
 export function Skeleton({ className = "w-full h-20" }: SkeletonProps) {
   return (
-    <div className={clsx("animate-pulse bg-neutral-700", className)}></div>
+    <div className={clsx("animate-pulse bg-neutral-500/80", className)}></div>
   );
 }

@@ -15,7 +15,7 @@ import { WeatherSearchResult } from "./weather-search-result";
 function WeatherSearchView() {
   const [data, setData] = useState<WeatherData | undefined>();
   const [histories, setHistories] = useState<SearchedHistory[]>([]);
-  const [status, setStatus] = useState<"loading" | "idle">("idle");
+  const [status, setStatus] = useState<"loading" | "idle">("loading");
 
   useEffect(() => {
     async function load() {
@@ -37,11 +37,11 @@ function WeatherSearchView() {
       } catch (error) {
         console.error(error);
         sessionStorage.removeItem("histories");
+      } finally {
+        setStatus("idle");
       }
     }
-    setStatus("loading");
     load();
-    setStatus("idle");
   }, []);
 
   const onSubmit: SearchWeatherFormProps["onSubmit"] = async ({
@@ -89,7 +89,7 @@ function WeatherSearchView() {
     <>
       <SearchWeatherForm onSubmit={onSubmit} />
       {status === "loading" ? (
-        <Skeleton className="w-full h-60 rounded-2xl" />
+        <Skeleton className="w-full h-64 rounded-2xl mt-28 " />
       ) : data ? (
         <div className="relative border border-white mt-28 rounded-2xl bg-white/20 pt-4 sm:pt-16 pb-4 px-4 sm:px-8">
           <Image
