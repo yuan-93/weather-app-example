@@ -5,7 +5,7 @@ import {
   InputCountry,
   InputCountryProps,
 } from "./input-country-code/input-country";
-import { SearchIcon } from "lucide-react";
+import { Loader2Icon, SearchIcon } from "lucide-react";
 
 export interface SearchWeatherFormProps {
   onSubmit: (formData: { city: string; countryCode: string }) => Promise<void>;
@@ -91,7 +91,11 @@ function SearchWeatherForm({ onSubmit }: SearchWeatherFormProps) {
             className="px-4 rounded-2xl bg-[#6C40B5] text-white"
             type="submit"
           >
-            <SearchIcon />
+            {status === "loading" ? (
+              <Loader2Icon className=" animate-spin" />
+            ) : (
+              <SearchIcon />
+            )}
           </button>
         </div>
         {error && (
