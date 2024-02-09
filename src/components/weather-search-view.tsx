@@ -1,15 +1,14 @@
 "use client";
 
 import { format } from "date-fns";
-import { SearchIcon, Trash2Icon } from "lucide-react";
-import { useEffect, useState, type FormEvent, type MouseEvent } from "react";
+import { SearchIcon, TrashIcon } from "lucide-react";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 import { getWeatherData } from "../services/open-weather-api";
-import { InputCountry } from "./input-country-code/input-country";
 import {
   SearchWeatherForm,
   SearchWeatherFormProps,
 } from "./search-weather-form";
-import Image from "next/image";
 
 type WeatherData = {
   location: {
@@ -121,60 +120,70 @@ function WeatherSearchView() {
     <div className="w-full">
       <SearchWeatherForm onSubmit={onSubmit} />
       {data && (
-        <div className="relative border border-white mt-40 rounded-xl  bg-white/20">
+        <div className="relative border border-white mt-28 rounded-2xl bg-white/20 pt-4 sm:pt-16 pb-4 px-4 sm:px-8">
           <Image
-            className="absolute max-w-full h-auto right-0 -top-32"
+            className="absolute max-w-full h-auto right-[23px] sm:right-[40px] -top-[68px] sm:-top-[95px] w-[150px] sm:w-80"
             alt="sun"
             width={300}
             height={300}
+            // src="/sun.png"
             src={`https://openweathermap.org/img/wn/${data.weather.icon}@2x.png`}
           />
-          <div className="px-8 py-4">
-            <h1 className="text-lg">Today&apos;s Weather</h1>
-            <p className="text-7xl text-[#6C40B5] font-bold">
-              {kelvinToCelsius(data.weather.temperature).toFixed(0)}°
-            </p>
-            <p>
-              H:{kelvinToCelsius(data.weather.maxTemperature).toFixed(0)}° L:
-              {kelvinToCelsius(data.weather.minTemperature).toFixed(0)}°
-            </p>
-            <ul className="flex flex-row justify-between">
-              <li>
+          <div className="grid grid-cols-12">
+            <div className=" col-span-6 sm:colspan-12">
+              <h1 className="text-sm sm:text-base">Today&apos;s Weather</h1>
+              <p className="sm:text-8xl text-6xl text-[#6C40B5] font-bold">
+                {kelvinToCelsius(data.weather.temperature).toFixed(0)}°
+              </p>
+              <p>
+                H: {kelvinToCelsius(data.weather.maxTemperature).toFixed(0)}° L:{" "}
+                {kelvinToCelsius(data.weather.minTemperature).toFixed(0)}°
+              </p>
+              <p className="font-bold text-gray-500 sm:hidden">
+                {data.location.city}, {data.location.countryCode}
+              </p>
+            </div>
+            <ul className="col-span-6 sm:col-span-12 gap-1 sm:gap-0 flex sm:flex-row flex-col-reverse items-end justify-start sm:justify-between text-gray-500 text-sm sm:text-base">
+              <li className="font-bold text-gray-500 hidden sm:block">
                 {data.location.city}, {data.location.countryCode}
               </li>
-              <li>{format(data.searchedDt, "dd-mm-yyyy hh:mm a")}</li>{" "}
+              <li>{format(data.searchedDt, "dd-mm-yyyy hh:mm aaa")}</li>{" "}
               <li>Humidity: {data.weather.humidity}%</li>
               <li>{data.weather.description}</li>
             </ul>
           </div>
-          <div className="px-4 mx-8 py-4 rounded-xl bg-white/20">
-            <h2 className="text-lg">Search History</h2>
-            <ul className="flex flex-col gap-2 mt-2">
+          <div className="mt-4 px-4 py-4 rounded-2xl bg-white/20">
+            <h3 className="text-sm sm:text-base">Search History</h3>
+            <ul className="flex flex-col gap-4 mt-4">
               {histories
                 .sort((a, b) => {
                   return b.searchedDt.getTime() - a.searchedDt.getTime();
                 })
                 .map((history, index) => (
                   <li
-                    className="flex flex-row bg-white/40 px-4 py-3 rounded-xl shadow-sm items-center"
+                    className="flex flex-row bg-white/40 px-2 sm:px-4 py-4 rounded-2xl shadow-sm items-center"
                     key={history.searchedDt.getTime()}
                   >
-                    <p className="flex-1">
-                      {history.location.city}, {history.location.countryCode}
-                    </p>
+                    <div className="flex flex-col sm:flex-row w-full">
+                      <p className="sm:flex-1 text-sm sm:text-base">
+                        {history.location.city}, {history.location.countryCode}
+                      </p>
+                      <p className="text-xs sm:text-sm sm:mr-2">
+                        {format(history.searchedDt, "dd-mm-yyyy hh:mm aaa")}
+                      </p>
+                    </div>
                     <div className="flex flex-row gap-2 items-center">
-                      <p>{format(history.searchedDt, "dd-mm-yyyy hh:mm a")}</p>
                       <button
                         onClick={onSearch(index)}
-                        className="bg-white rounded-full p-1"
+                        className="bg-white rounded-full p-2 shadow-md"
                       >
-                        <SearchIcon />
+                        <SearchIcon size={16} className="text-gray-500" />
                       </button>
                       <button
                         onClick={onRemoveHistory(index)}
-                        className="bg-white rounded-full p-1"
+                        className="bg-white rounded-full p-2 shadow-md"
                       >
-                        <Trash2Icon />
+                        <TrashIcon size={16} className="text-gray-500" />
                       </button>
                     </div>
                   </li>

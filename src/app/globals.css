@@ -4,6 +4,14 @@
 
 @layer {
   input[type="text"] {
-    @apply bg-white/20;
+    @apply bg-white/20 w-full;
+  }
+  /* https://discourse.webflow.com/t/autofill-background-color-turn-to-white-how-to-change-this/200153/3 */
+  /* https://stackoverflow.com/questions/2781549/removing-input-background-colour-for-chrome-autocomplete */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    transition: background-color 5000s;
   }
 }

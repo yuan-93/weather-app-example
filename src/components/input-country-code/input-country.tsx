@@ -23,7 +23,7 @@ const options = countries.map((e) => ({
 function InputCountry({
   name,
   required,
-  placeholder,
+  placeholder = "",
   value,
   onChange,
 }: InputCountryProps) {
@@ -39,18 +39,18 @@ function InputCountry({
       classNames={{
         container: (state) =>
           clsx(
-            "relative text-base w-full",
-            state.isFocused && "outline-none ring-2 ring-offset-2",
+            "relative sm:text-base text-xs w-full min-w-20 sm:min-w-32 max-w-20 sm:max-w-32",
+            state.isFocused && "",
             state.isDisabled && "opacity-50"
           ),
-        valueContainer: () => "cursor-text gap-2",
+        valueContainer: () => "cursor-text",
         placeholder: () => "opacity-80",
         menu: (state) =>
           clsx("bg-white relative my-2.5 shadow-md rounded-md border"),
         menuList: () => clsx("m-1 rounded-md"),
         option: (state) =>
           clsx(
-            "px-4 py-1.5",
+            "px-0.5 py-0.5",
             state.isFocused &&
               !state.isSelected &&
               "text-neutral-200 bg-neutral-400 rounded-md",
