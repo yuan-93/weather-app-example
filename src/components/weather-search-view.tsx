@@ -33,7 +33,6 @@ function WeatherSearchView() {
   const [data, setData] = useState<WeatherData | undefined>();
   const [histories, setHistories] = useState<SearchedHistory[]>([]);
   const [status, setStatus] = useState<"loading" | "idle">("idle");
-  const [error, setError] = useState<Error | undefined>();
 
   useEffect(() => {
     async function load() {
@@ -62,29 +61,16 @@ function WeatherSearchView() {
     setStatus("idle");
   }, []);
 
-  useEffect(() => {
-    if (status === "loading") {
-      setError(undefined);
-    }
-  }, [status]);
-
   const onSubmit: SearchWeatherFormProps["onSubmit"] = async ({
     city,
     countryCode,
   }) => {
-    try {
-      const newData = await getWeatherData(city, countryCode);
-      setData(newData);
-      addHistory({
-        location: newData.location,
-        searchedDt: newData.searchedDt,
-      });
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        setError(error);
-      }
-      console.error(error);
-    }
+    const newData = await getWeatherData(city, countryCode);
+    setData(newData);
+    addHistory({
+      location: newData.location,
+      searchedDt: newData.searchedDt,
+    });
   };
 
   const onSearch = (index: number) => {
@@ -127,7 +113,7 @@ function WeatherSearchView() {
             width={300}
             height={300}
             // src="/sun.png"
-            src={`https://openweathermap.org/img/wn/${data.weather.icon}@2x.png`}
+            src={`https://openweathermap.org/img/wn/${data.weather.icon}@4x.png`}
           />
           <div className="grid grid-cols-12">
             <div className=" col-span-6 sm:colspan-12">
