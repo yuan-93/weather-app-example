@@ -46,7 +46,9 @@ function InputCountry({
         valueContainer: () => "cursor-text dark:text-white",
         placeholder: () => "opacity-80",
         menu: (state) =>
-          clsx("bg-white relative my-2.5 shadow-md rounded-md border"),
+          clsx(
+            "bg-white dark:bg-[#1A1A1A] relative my-2.5 shadow-md rounded-md border"
+          ),
         menuList: () => clsx("m-1 rounded-md"),
         option: (state) =>
           clsx(

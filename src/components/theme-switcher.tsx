@@ -24,11 +24,15 @@ export function ThemeSwitcher() {
   return (
     <button
       onClick={onClick}
-      className="px-4 rounded-2xl bg-[#6C40B5] text-white dark:bg-[#28124D]"
+      className="px-3 sm:px-4 rounded-2xl bg-[#6C40B5] text-white dark:bg-[#28124D]"
     >
-      {theme === "dark" && <MoonIcon />}
-      {theme === "light" && <SunIcon />}
-      {theme === "system" && <SunMoonIcon />}
+      {theme === "system" ? (
+        <SunMoonIcon className="sm:w-6 sm:h-6 h-4 w-4" />
+      ) : theme === "dark" ? (
+        <MoonIcon className="sm:w-6 sm:h-6 h-4 w-4" />
+      ) : (
+        <SunIcon className="sm:w-6 sm:h-6 h-4 w-4" />
+      )}
     </button>
   );
 }

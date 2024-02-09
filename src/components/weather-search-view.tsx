@@ -88,7 +88,7 @@ function WeatherSearchView() {
 
   return (
     <>
-      <div className="flex flex-row gap-2">
+      <div className="flex flex-row gap-1">
         <SearchWeatherForm onSubmit={onSubmit} />
         <ThemeSwitcher />
       </div>

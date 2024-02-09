@@ -54,7 +54,7 @@ function SearchWeatherForm({ onSubmit }: SearchWeatherFormProps) {
       onSubmit={handleOnSubmit}
       className=" max-w-full w-full"
     >
-      <div className="flex flex-row w-full gap-2">
+      <div className="flex flex-row w-full gap-1">
         <div className="flex flex-row rounded-2xl h-10 sm:h-[60px] px-2.5 sm:px-4 gap-2.5 sm:gap-4 flex-1 bg-white/20 dark:bg-[#1A1A1A]/50">
           <div className="relative flex items-center">
             <Text
@@ -92,13 +92,13 @@ function SearchWeatherForm({ onSubmit }: SearchWeatherFormProps) {
           </div>
         </div>
         <button
-          className="px-4 rounded-2xl bg-[#6C40B5] text-white dark:bg-[#28124D]"
+          className="px-3 sm:px-4 rounded-2xl bg-[#6C40B5] text-white dark:bg-[#28124D]"
           type="submit"
         >
           {status === "loading" ? (
-            <Loader2Icon className=" animate-spin" />
+            <Loader2Icon className="sm:w-6 sm:h-6 h-4 w-4 animate-spin" />
           ) : (
-            <SearchIcon />
+            <SearchIcon className="sm:w-6 sm:h-6 h-4 w-4" />
           )}
         </button>
       </div>
