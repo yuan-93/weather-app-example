@@ -1,7 +1,8 @@
 import { format } from "date-fns";
-import type { SearchedHistory } from "./types";
-import type { MouseEvent } from "react";
 import { SearchIcon, TrashIcon } from "lucide-react";
+import type { MouseEvent } from "react";
+import { Text } from "./text";
+import type { SearchedHistory } from "./types";
 
 export interface WeatherSearchHistoryProps {
   histories: SearchedHistory[];
@@ -26,16 +27,16 @@ export function WeatherSearchHistory({
           })
           .map((history, index) => (
             <li
-              className="flex flex-row bg-white/40 px-2 sm:px-4 py-4 rounded-2xl shadow-sm items-center"
+              className="flex flex-row bg-white/40 px-2 sm:px-4 py-3 sm:py-4 rounded-2xl shadow-sm items-center"
               key={history.searchedDt.getTime()}
             >
               <div className="flex flex-col sm:flex-row w-full">
-                <p className="sm:flex-1 text-sm sm:text-base">
+                <Text as="p" size="body" className="sm:flex-1">
                   {history.location.city}, {history.location.countryCode}
-                </p>
-                <p className="text-xs sm:text-sm sm:mr-2">
-                  {format(history.searchedDt, "dd-mm-yyyy hh:mm aaa")}
-                </p>
+                </Text>
+                <Text as="p" size={"label"} className="sm:mr-2">
+                  {format(history.searchedDt, "dd-mm-yyyy hh:mmaaa")}
+                </Text>
               </div>
               <div className="flex flex-row gap-2 items-center">
                 <button
