@@ -5,6 +5,7 @@ import "./globals.css";
 const noto_sans = Noto_Sans({
   subsets: ["latin"],
   variable: "--font-noto-sans",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
