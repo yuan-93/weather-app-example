@@ -9,25 +9,8 @@ import {
   SearchWeatherForm,
   SearchWeatherFormProps,
 } from "./search-weather-form";
-
-type WeatherData = {
-  location: {
-    city: string;
-    countryCode: string;
-  };
-  weather: {
-    main: string;
-    description: string;
-    icon: string;
-    temperature: number;
-    minTemperature: number;
-    maxTemperature: number;
-    humidity: number;
-  };
-  searchedDt: Date;
-};
-
-type SearchedHistory = Pick<WeatherData, "location" | "searchedDt">;
+import type { WeatherData, SearchedHistory } from "./types";
+import { WeatherSearchHistory } from "./weather-search-history";
 
 function WeatherSearchView() {
   const [data, setData] = useState<WeatherData | undefined>();
@@ -138,44 +121,11 @@ function WeatherSearchView() {
               <li>{data.weather.description}</li>
             </ul>
           </div>
-          <div className="mt-4 px-4 py-4 rounded-2xl bg-white/20">
-            <h3 className="text-sm sm:text-base">Search History</h3>
-            <ul className="flex flex-col gap-4 mt-4">
-              {histories
-                .sort((a, b) => {
-                  return b.searchedDt.getTime() - a.searchedDt.getTime();
-                })
-                .map((history, index) => (
-                  <li
-                    className="flex flex-row bg-white/40 px-2 sm:px-4 py-4 rounded-2xl shadow-sm items-center"
-                    key={history.searchedDt.getTime()}
-                  >
-                    <div className="flex flex-col sm:flex-row w-full">
-                      <p className="sm:flex-1 text-sm sm:text-base">
-                        {history.location.city}, {history.location.countryCode}
-                      </p>
-                      <p className="text-xs sm:text-sm sm:mr-2">
-                        {format(history.searchedDt, "dd-mm-yyyy hh:mm aaa")}
-                      </p>
-                    </div>
-                    <div className="flex flex-row gap-2 items-center">
-                      <button
-                        onClick={onSearch(index)}
-                        className="bg-white rounded-full p-2 shadow-md"
-                      >
-                        <SearchIcon size={16} className="text-gray-500" />
-                      </button>
-                      <button
-                        onClick={onRemoveHistory(index)}
-                        className="bg-white rounded-full p-2 shadow-md"
-                      >
-                        <TrashIcon size={16} className="text-gray-500" />
-                      </button>
-                    </div>
-                  </li>
-                ))}
-            </ul>
-          </div>
+          <WeatherSearchHistory
+            histories={histories}
+            onSearch={onSearch}
+            onRemoveHistory={onRemoveHistory}
+          />
         </div>
       )}
     </div>
